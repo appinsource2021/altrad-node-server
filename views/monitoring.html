@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>About Sharks</title>
+</head>
+<script type="module">
+
+    import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+
+    const boards = document.getElementById('boards');
+
+    const socket = io("ws://192.168.2.100:3000/monitor", {
+        reconnectionDelayMax: 10000,
+        auth: {
+            token: "123"
+        },
+        query: {
+            "my-key": "my-value"
+        }
+    });
+
+    // console.log('socketID', Object.keys(socket) );
+    // console.log('socketID', socket );
+    // socket.emit('all_boards');
+    socket.on('all_boards', data => {
+
+        console.log('all_boards', data );
+
+
+        boards.innerHTML = '';
+
+        data.map( item => {
+
+            const board = document.createElement('div');
+            board.style.display = 'flex';
+            // board.style.flex = 1;
+            board.style.padding = '10px';
+
+            board.style.border = '1px solid blue';
+            board.innerText = item.boardName;
+
+            const holderWrapper = document.createElement('div');
+            holderWrapper.style.display = 'flex';
+            holderWrapper.style.flexDirection= 'column';
+            holderWrapper.flexDirection= 'row';
+
+            holderWrapper.style.border = '1px solid yellow';
+            board.appendChild(holderWrapper);
+            item?.holders?.map( item => {
+                const boardHolder = document.createElement('div');
+                boardHolder.style.display = 'flex';
+                boardHolder.style.flex = 1;
+                boardHolder.style.padding = '10px';
+
+                boardHolder.style.border = '1px solid red';
+                boardHolder.innerText = `${item.cardId} ${item.first_name} ${item.last_name} [${item.job}]`;
+                holderWrapper.appendChild(boardHolder);
+            })
+
+
+            boards.appendChild( board );
+
+        })
+
+    });
+
+    socket.on('disconnected_board', boardId => {
+        console.log('all_boards', boardId );
+    });
+
+    socket.on('disconnect', boardId => {
+        boards.innerHTML = '';
+        console.log('all_boards',  );
+    });
+
+
+
+
+
+    // io.on('holders', holders => {
+    //
+    //
+    // });
+
+</script>
+
+
+<body>
+    <div id="boards" style="display: flex; flex-direction: row; column-gap: 10px "></div>
+</body>
+
+
+
+</html>

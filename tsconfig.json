@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "jsx": "react",
+    // Ensure that .d.ts files are created by tsc, but not .js files
+    "declaration": true, // generate .d.ts files
+    "outDir":   "./dist",
+    "rootDir":  "./src",
+    // "baseUrl": "./",
+    "esModuleInterop": true,
+    "stripInternal": true // Ignore Private declaration and Methods
+  },
+  "include": [
+    "src/**/*.tsx",
+    "src/**/*.d.ts",
+    "src/styles/**/*.sass",
+    "src/styles/**/*.css",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
